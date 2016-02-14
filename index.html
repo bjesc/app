@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>博精二手车 - 买好车，卖好价， 零差价</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link href="images/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="weixin" id="winxinShow" onclick="msgHide(this)">
+  <div class="t"> 微信内无法下载，请点击 <strong> 右上角 </strong> 按钮 <br>
+    选择 <strong> 【在浏览器中打开】 </strong> 即可正常下载 </div>
+</div>
+<section id="secBody">
+  <div class="top">
+   <a href="http://m.bjesc.com" target="_blank"><div class="logo"></div></a>
+    <div class="btnc"> <a class="btn btnwhite" id="dlbt" href="javascript:void(0)" onclick="btnDownload()">立即下载</a></div>
+  </div>
+  <div class="content">
+    <a href="http://m.bjesc.com/list.html" target="_blank"><div class="bss">买车,卖车,评估, 服务</div></a>
+    <div class="app_qr">二维码</div>
+  </div>
+</section>
+<script type="text/javascript">
+
+    var apk_ver = "v1.20160106"
+	var ipa_ver = "01.01.1512_000"
+	
+    var BrowserInfo = {
+        userAgent: navigator.userAgent,
+        isAndroid: navigator.userAgent.match(/android/ig),
+        isIphone: navigator.userAgent.match(/iphone|ipod/ig),
+        isIpad: navigator.userAgent.match(/ipad/ig),
+        isWeixin: navigator.userAgent.match(/MicroMessenger/ig),
+        isIosVersionLessThanSeven: function () {
+            if (this.isIphone || this.isIpad) {
+                return Boolean(navigator.userAgent.match(/os [1-6]_\d[_\d]* like mac/ig));
+            }
+            return false;
+        }
+    }
+
+    var SecondCarAppUtitl = {
+        getUrlParameter: function (name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURIComponent(r[2]); return null;
+        }
+    }
+
+    var Urls = {
+        android: "https://app.bjesc.com/down/bjesc_android_" + apk_ver + ".apk",
+        ios: "itms-services://?action=download-manifest&url=https://app.bjesc.com/plistModule.plist",
+        weixinAndroid: "",
+        weixinIos: "",
+        other: ""
+    }
+
+    bindUrl();
+
+    function bindUrl() {
+        var type = SecondCarAppUtitl.getUrlParameter('type');
+        if (type == null || type === "null") type = "";
+        if (type !== "") {
+            Urls.android = "https://app.bjesc.com/bjesc." + type + "";
+            Urls.ios = "itms-services://?action=download-manifest&url=https://app.bjesc.com/plistModule.plist";
+        } else {
+            Urls.android = "https://app.bjesc.com/down/bjesc_android_" + apk_ver + "_59171_0.apk";
+            Urls.ios = "itms-services://?action=download-manifest&url=https://app.bjesc.com/plistModule.plist";
+        }
+    }
+
+
+    function btnDownload() {
+        if (BrowserInfo.isWeixin) {
+            document.getElementById('secBody').style.marginTop = '100px';
+            document.getElementById('winxinShow').style.display = 'block';
+        } else {
+            if (BrowserInfo.isAndroid) {
+                window.location.href = Urls.android;
+            }
+            else if (BrowserInfo.isIpad || BrowserInfo.isIphone) {
+                window.location.href = Urls.ios;
+            } else {
+                window.location.href = Urls.other;
+            }
+        }
+    }
+
+    function msgHide(obj) {
+        obj.style.display = 'none';
+        document.getElementById('secBody').style.marginTop = '0';
+    }
+</script> 
+<script type="text/javascript">
+    function onBridgeReady() {
+        WeixinJSBridge.on('menu:share:appmessage', function (argv) {
+            WeixinJSBridge.invoke('sendAppMessage', {
+                "link": window.location.href,
+                "img_url": "https://app.bjesc.com/images/icon.png",
+                "img_width": "120",
+                "img_height": "120",
+                "desc": "博精二手车 - 买好车，卖好价， 零差价",
+                "title": "博精二手车下载"
+            }, function (res) {
+
+            });
+        });
+        WeixinJSBridge.on('menu:share:timeline', function (argv) {
+            WeixinJSBridge.invoke("shareTimeline", {
+                "link": window.location.href,
+                "img_url": "https://app.bjesc.com/images/icon.png",
+                "img_width": "120",
+                "img_height": "120",
+                "desc": "博精二手车 - 买好车，卖好价， 零差价",
+                "title": "博精二手车下载"
+            },
+                function (e) {
+
+                })
+        });
+    }
+
+    if (typeof WeixinJSBridge === "undefined") {
+        if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        }
+    } else {
+        onBridgeReady();
+    }
+</script>
+</body>
+</html>
